@@ -54,10 +54,15 @@ export class FormValidator {
         this.form.addEventListener("submit", (e) => this.handleSubmit(e));
     }
 
-    // helper function to dynamically replace templates in messages by evaluated strings
     interpolate(template, field) {
+    
+        /**
+         ** helper function to dynamically replace templates in messages by evaluated strings
+         ** @param {String | Function} template - either a string containing a template or a function returning a string based on the field
+         ** @param {HTMLInputElement} field - the field for which the template needs to be evaluated
+         */
 
-        // if template is a function, that should be allowed, too => return it immediately
+        // if template is a function, invoke it and return its value immediately
         if (typeof template === "function") return template(field);
 
         // otherwise return the string based on the field properties and template
