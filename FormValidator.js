@@ -10,14 +10,22 @@ const DEFAULT_MESSAGES = {
   rangeOverflow: "Der Wert darf maximal {max} sein."
 };
 
+const DEFAULT_ON_FIELD_ERROR = (field, message) => {
+    const errorElement = document.getElementById(`${field.id}-error`);
+    if (errorElement) {
+        errorElement.textContent = message;
+    }
+}
+
 
 export class FormValidator {
 
-    constructor(formElement, customMessages = {}) {
+    constructor(formElement, customMessages = {}, options = {}) {
 
         /**
          * @param {HTMLFormElement} formElement - the form element in the DOM that needs validation
-         * @param {Object} customMessages - an object containing custom messages for some or every validity property
+         * @param {Object} customMessages - an optional object containing custom messages for some or every validity property
+         * @param {Object} options - optional config parameters, such as callbacks
          */
 
         // return early if no form element has been passed in
@@ -31,6 +39,9 @@ export class FormValidator {
 
         // pull in default error messages and override with custom messages (if any)
         this.messages = { ...DEFAULT_MESSAGES, ...customMessages };
+
+        // set onFieldError callback - either to custom or default fallback
+        this.onFieldError = options.onFieldError || DEFAULT_ON_FIELD_ERROR;
 
         this.init();
     }
@@ -82,6 +93,11 @@ export class FormValidator {
                 break; // prioritise first mistake found
             }
         }
+
+        // trigger UI callback to display the error message in the DOM
+        // (in case the field is valid, error message will be "", 
+        // hence deleting possible former messages from the DOM)
+        this.onFieldError(field, formattedMessage);
 
         return field.checkValidity(); // true if field is valid, false if invalid
     }
