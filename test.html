@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="module" src="./testApp.js"></script>
+    <form id="todoForm">
+    <div class="form-group">
+        <label for="dueDate">Fälligkeitsdatum:</label>
+        <!-- Über data-validate verknüpfen wir das Feld mit unserer JS-Regel -->
+        <input type="date" id="dueDate" required data-validate="future-date">
+        <span class="error-text" id="dueDate-error"></span>
+    </div>
+    <button type="submit">Aufgabe erstellen</button>
+    </form>
+
+    
+</body>
+</html>
