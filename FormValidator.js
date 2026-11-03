@@ -25,7 +25,19 @@ export class FormValidator {
         // set onFieldError callback - either to custom or default fallback
         this.onFieldError = options.onFieldError || DEFAULT_ON_FIELD_ERROR;
 
+        // hold a liste of custom rules which may be added by the user of the class
+        this.customRules = [];
+
         this.init();
+    }
+
+    addRule(rule) {
+        /**
+         ** Allows the user of the class tu register his own custom validation rules
+         ** @param {Object} rule { name: string, validate: function, message: string }
+         */
+
+         this.customRules.push(rule);
     }
 
     init() {
@@ -61,25 +73,42 @@ export class FormValidator {
 
         // always reset custom validity first
         field.setCustomValidity("");
+        let errorMessage = "";
 
-        // Check which native HTML 5 error occurs (if any)
+        // FIRST: Check which native HTML 5 error occurs (if any)
+        
         // since field.validity is an object, we loop through our config
         for (const errorKey in this.messages) {
             if (field.validity[errorKey]) {
                 // dynamically generate error message based on errorKey and our message table
                 const rawMessage = this.messages[errorKey];
-                const formattedMessage = this.interpolate(rawMessage, field);
+                errorMessage = this.interpolate(rawMessage, field);
 
                 // pass the message to the browser, triggering :user-invalid pseudo class in CSS
-                field.setCustomValidity(formattedMessage);
+                field.setCustomValidity(errorMessage);
                 break; // prioritise first mistake found
+            }
+        }
+
+        // THEN: If all native HTML 5 validations are succesful, 
+        // check against custom validation rules (plugins)
+        if (field.checkValidity()) {
+           // look for a rule applying to this field (via data-validate)
+           const matchingRule = this.customRules.find(rule => field.dataset.validate === rule.name);
+
+            if (matchingRule) {
+                const isValid = matchingRule.validate(field);
+                if(!isValid) {
+                    errorMessage = this.interpolate(matchingRule.message, field);
+                    field.setCustomValidity(errorMessage);
+                }
             }
         }
 
         // trigger UI callback to display the error message in the DOM
         // (in case the field is valid, error message will be "", 
         // hence deleting possible former messages from the DOM)
-        this.onFieldError(field, formattedMessage);
+        this.onFieldError(field, errorMessage);
 
         return field.checkValidity(); // true if field is valid, false if invalid
     }
