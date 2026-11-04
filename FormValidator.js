@@ -49,7 +49,18 @@ export class FormValidator {
         this.fields.forEach(field => {
             field.addEventListener("blur", () => this.validateField(field));
             field.addEventListener("input", () => this.validateField(field));
+            field.addEventListener("change", () => {
+                this.validateField(field);
+                
+                // Trick: Wenn ein Custom-Fehler vorliegt, erzeugen wir einen minimalen 
+                // Fokus-Wechsel, damit der Browser begreift: "Die Interaktion ist vorbei!"
+                if (field.type === "date" && !field.validity.valid) {
+                    // Ein minimaler Refresh der Pseudoklassen
+                    field.reportValidity(); 
+                }
+            });
         });
+
 
         this.form.addEventListener("submit", (e) => this.handleSubmit(e));
     }
@@ -115,7 +126,7 @@ export class FormValidator {
         // hence deleting possible former messages from the DOM)
         this.onFieldError(field, errorMessage);
 
-        return field.checkValidity(); // true if field is valid, false if invalid
+        return field.validity.valid; // true if field is valid, false if invalid
     }
 
     handleSubmit(event) {

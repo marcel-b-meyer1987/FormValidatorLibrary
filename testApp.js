@@ -1,4 +1,4 @@
-import { FormValidator } from "./FormValidator";
+import { FormValidator } from "./FormValidator.js";
 
 const todoForm = document.getElementById("todoForm");
 const validator = new FormValidator(todoForm);
@@ -17,8 +17,11 @@ validator.addRule({
         inputDate.setHours(0,0,0,0);
         today.setHours(0,0,0,0);
 
+        console.log(inputDate);
+        console.log(today);
+
         // returns true if date is today or in the future,
         // returns false if date is in the past
-        return inputDate >= today; 
+        return inputDate.getTime() >= today.getTime(); 
     }
 });

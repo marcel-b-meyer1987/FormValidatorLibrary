@@ -1,0 +1,35 @@
+/* Eine saubere Struktur für das Formularfeld */
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 1. Visuelles Feedback für das Input-Feld selbst */
+input:user-valid {
+  border: 2px solid #2e7d32; /* Grün */
+  background-color: #f1f8e9;
+}
+
+input:user-invalid {
+  border: 2px solid #d32f2f; /* Rot */
+  background-color: #ffebee;
+  outline: none;
+}
+
+
+/* 2. Steuerung der Fehlermeldung */
+.error-text {
+  display: none; /* Standardmäßig komplett unsichtbar */
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+/* Der CSS-Zaubertrick: 
+   Wenn das Input-Feld im ':user-invalid'-Zustand ist, 
+   wird das nachfolgende .error-text Element eingeblendet! */
+input:user-invalid ~ .error-text {
+  display: block;
+}
