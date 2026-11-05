@@ -106,18 +106,16 @@ export class FormValidator {
             }
         }
 
-        // THEN: If all native HTML 5 validations are succesful, 
-        // check against custom validation rules (plugins)
-        if (field.checkValidity()) {
-           // look for a rule applying to this field (via data-validate)
-           const matchingRule = this.customRules.find(rule => field.dataset.validate === rule.name);
+        // THEN: Check against custom validation rules (plugins), if any
 
-            if (matchingRule) {
-                const isValid = matchingRule.validate(field);
-                if(!isValid) {
-                    errorMessage = this.interpolate(matchingRule.message, field);
-                    field.setCustomValidity(errorMessage);
-                }
+        // look for a rule applying to this field (via data-validate)
+        const matchingRule = this.customRules.find(rule => field.dataset.validate === rule.name);
+
+        if (matchingRule) {
+            const isValid = matchingRule.validate(field);
+            if(!isValid) {
+                errorMessage = this.interpolate(matchingRule.message, field);
+                field.setCustomValidity(errorMessage);
             }
         }
 
@@ -144,7 +142,7 @@ export class FormValidator {
             event.preventDefault();
 
             // set focus to first invalid field
-            const firstInvalid = this.fields.find(field => !field.validity.valid);
+            const firstInvalid = document.querySelector("*:user-invalid");
             if (firstInvalid) firstInvalid.focus();
         }
     }
