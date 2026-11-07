@@ -1,13 +1,13 @@
 
 // Robust standard fallback messages in German
 export const DEFAULT_MESSAGES = {
-  valueMissing: "Dieses Feld darf nicht leer sein.",
-  typeMismatch: "Bitte gib eine gültige Eingabe ein.",
-  patternMismatch: "Das Format dieser Eingabe ist ungültig.",
-  tooShort: "Mindestens {minLength} Zeichen erforderlich. Aktuell: {length}.",
-  tooLong: "Maximal {maxLength} Zeichen erlaubt.",
-  rangeUnderflow: "Der Wert muss mindestens {min} sein.",
-  rangeOverflow: "Der Wert darf maximal {max} sein."
+  valueMissing: "This field must not be left blank.",
+  typeMismatch: "Please make a valid entry.",
+  patternMismatch: "The format is invalid.",
+  tooShort: "At least {minLength} characters needed. Currently entered: {length}.",
+  tooLong: "No more than {maxLength} characters allowed.",
+  rangeUnderflow: "The value must be at least {min}.",
+  rangeOverflow: "The value may not be higher than {max}."
 };
 
 // Default callback for rendering error messages in UI

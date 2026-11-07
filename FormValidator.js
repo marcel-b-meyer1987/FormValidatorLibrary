@@ -28,6 +28,8 @@ export class FormValidator {
         // hold a liste of custom rules which may be added by the user of the class
         this.customRules = [];
 
+        this.options = options;
+
         this.init();
     }
 
@@ -62,7 +64,7 @@ export class FormValidator {
         });
 
 
-        this.form.addEventListener("submit", (e) => this.handleSubmit(e));
+        this.form.addEventListener("submit", (e) => this.handleSubmit(e, this.options?.customSubmitMethod));
     }
 
     interpolate(template, field) {
@@ -127,7 +129,7 @@ export class FormValidator {
         return field.validity.valid; // true if field is valid, false if invalid
     }
 
-    handleSubmit(event) {
+    handleSubmit(event, customSubmitMethod) {
 
         let isFormValid = true;
 
@@ -144,7 +146,12 @@ export class FormValidator {
             // set focus to first invalid field
             const firstInvalid = document.querySelector("*:user-invalid");
             if (firstInvalid) firstInvalid.focus();
+
+            // make sure to return and thereby prevent the custom submit method (if any), too
+            return; 
         }
+
+        if (customSubmitMethod) customSubmitMethod();
     }
 
 }
