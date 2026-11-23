@@ -151,7 +151,7 @@ export class FormValidator {
             return; 
         }
 
-        if (customSubmitMethod) customSubmitMethod();
+        if (customSubmitMethod) customSubmitMethod(event);
     }
 
 }
